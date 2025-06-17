@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "sender_id": 3,
+    "receiver_id": null,
+    "room_id": 1,
+    "algorithm": "AES",
+    "encrypted": "w3qFt81EYE8X+pCSqkaJ5ArnsLrb6AgEeiaX+5LJUZL16L+YoVN0Tjw=",
+    "decrypted": null,
+    "timestamp": "2025-06-17T22:03:28.455798"
+  },
+  {
+    "id": 2,
+    "sender_id": 1,
+    "receiver_id": null,
+    "room_id": 1,
+    "algorithm": "AES",
+    "encrypted": "/fAtw76iLpTakp9C6eKjQtQZqfue+dS5zbt69qwQirMqjhueCwQitcwQ",
+    "decrypted": null,
+    "timestamp": "2025-06-17T22:04:08.449034"
+  }
+]

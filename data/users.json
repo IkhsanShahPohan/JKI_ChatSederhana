@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "username": "ihksanpohan@gmail.com",
+    "password_hash": "scrypt:32768:8:1$GMfICE4DsWHxM9wJ$19079404658b46851b37600c4605e65dec82276e42b5fea707de9388f300d3a631c98dd4229891253fbdf37c6fbefcd9a9df75c41cee44652ca4a3670c664772",
+    "is_active": true,
+    "created_at": "2025-06-17T22:00:27.942172"
+  },
+  {
+    "id": 2,
+    "username": "ayamsayur@gmail.com",
+    "password_hash": "scrypt:32768:8:1$Y7RqkvX3ukvmxfYe$e93e4b6ad1fe46e2850cd691cc1b3ebe008eaa7000ce697cf065a23fc5e9509abc864f09527c3698b229a351e7e38cfd22e74519e23db40b8df2b6b926e0b5d1",
+    "is_active": true,
+    "created_at": "2025-06-17T22:01:02.527181"
+  },
+  {
+    "id": 3,
+    "username": "raswan@gmail.com",
+    "password_hash": "scrypt:32768:8:1$IVO6WGHN6pgrQAlB$5bae52c1d77528738375029783d54c753f46516833f63b4b8896020675a135a922ce30d8c55cb317aa300c92b0f017fc1be7e692162646b6e9bcd37b4636e9ee",
+    "is_active": true,
+    "created_at": "2025-06-17T22:03:07.049947"
+  }
+]
