@@ -18,5 +18,65 @@
     "encrypted": "/fAtw76iLpTakp9C6eKjQtQZqfue+dS5zbt69qwQirMqjhueCwQitcwQ",
     "decrypted": null,
     "timestamp": "2025-06-17T22:04:08.449034"
+  },
+  {
+    "id": 3,
+    "sender_id": 1,
+    "receiver_id": null,
+    "room_id": 2,
+    "algorithm": "AES",
+    "encrypted": "rE/1RhISIg/yeMWr+P+9KqiY8d7RHld9UMqCBc4uqDY6eb59iQ==",
+    "decrypted": null,
+    "timestamp": "2025-06-17T23:20:15.402962"
+  },
+  {
+    "id": 4,
+    "sender_id": 1,
+    "receiver_id": null,
+    "room_id": 2,
+    "algorithm": "AES",
+    "encrypted": "88Pr2YbSp+QpyRG3Ogq3DvKiFKiGro/qP3R6eK4o+E/E4NIJ",
+    "decrypted": null,
+    "timestamp": "2025-06-17T23:50:46.595537"
+  },
+  {
+    "id": 5,
+    "sender_id": 1,
+    "receiver_id": null,
+    "room_id": 2,
+    "algorithm": "AES",
+    "encrypted": "VIj2C2CwQZpTqhSX3yHKzmh+zLO0Lqnpj7UnT6YipJ6TGotVzpNh9g==",
+    "decrypted": null,
+    "timestamp": "2025-06-17T23:50:49.417344"
+  },
+  {
+    "id": 6,
+    "sender_id": 1,
+    "receiver_id": null,
+    "room_id": 2,
+    "algorithm": "AES",
+    "encrypted": "K2uTBgI4ayztQpTuTq16ncBbSrkQvqM+54A8VDb6XWM1PmzrnllFrxlEe7QJ36HKkSETNT9vV5FmRqaFdC0dMak9zyz0GBc4gtA94aQU8ywFyrcIUKRfgBj+Jw==",
+    "decrypted": null,
+    "timestamp": "2025-06-17T23:51:32.398455"
+  },
+  {
+    "id": 7,
+    "sender_id": 2,
+    "receiver_id": null,
+    "room_id": 2,
+    "algorithm": "AES",
+    "encrypted": "Ral9h3MW45Ri+rXq2jwu1cvn5A5/CaoA0SQUiJm3WvkFAKbJ",
+    "decrypted": null,
+    "timestamp": "2025-06-17T23:54:20.208303"
+  },
+  {
+    "id": 8,
+    "sender_id": 4,
+    "receiver_id": null,
+    "room_id": 2,
+    "algorithm": "AES",
+    "encrypted": "xaiZlOP7nwWANxa8e+IAjxCAQMdk40VAg/acRdhA8KD/BAHohqgFINw=",
+    "decrypted": null,
+    "timestamp": "2025-06-17T23:54:55.420564"
   }
 ]

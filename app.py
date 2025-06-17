@@ -293,12 +293,15 @@ def get_avatar_color_idx(username):
 @app.route('/')
 def index():
     if 'username' in session:
-        return redirect(url_for('chat'))
+        return redirect(url_for('rooms'))
     return render_template('login.html')
 
 # Login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('rooms'))  # langsung ke rooms jika sudah login
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -311,6 +314,7 @@ def login():
         else:
             error = 'Email atau kata sandi tidak valid.'
             return render_template('login.html', error=error)
+    
     return render_template('login.html')
 
 # Halaman chat
@@ -455,6 +459,9 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('rooms'))  # langsung ke rooms jika sudah login
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -464,6 +471,7 @@ def register():
         else:
             error = 'Nama pengguna sudah terdaftar.'
             return render_template('register.html', error=error)
+    
     return render_template('register.html')
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
