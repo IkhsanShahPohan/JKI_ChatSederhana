@@ -6,335 +6,490 @@
     <title>Room: {{ room.name }} - Secure Chat</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
     <style>
-body {
-        margin: 0; padding: 0;
-        min-height: 100vh;
-        font-family: 'Inter', Arial, sans-serif;
-        background: linear-gradient(120deg, #f3f4f6 0%, #e0e7ff 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        position: relative;
-    }
-    .bg-shape1, .bg-shape2, .bg-shape3 {
-        position: absolute;
-        z-index: 0;
-        border-radius: 50%;
-        filter: blur(80px);
-        opacity: 0.5;
-    }
-    .bg-shape1 {
-        width: 400px; height: 400px;
-        background: linear-gradient(135deg, #dbeafe 0%, #a5b4fc 100%);
-        top: -120px; left: -140px;
-    }
-    .bg-shape2 {
-        width: 300px; height: 300px;
-        background: linear-gradient(135deg, #f3e8ff 0%, #c7d2fe 100%);
-        bottom: -100px; right: -120px;
-    }
-    .bg-shape3 {
-        width: 200px; height: 200px;
-        background: linear-gradient(135deg, #d1fae5 0%, #bbf7d0 100%);
-        top: 60%; left: 10%;
-        opacity: 0.4;
-    }
-    .chat-container {
-        background: rgba(255,255,255,0.7);
-        border-radius: 36px;
-        box-shadow: 0 16px 48px 0 rgba(44, 62, 80, 0.10), 0 1.5px 8px 0 rgba(44,62,80,0.07);
-        backdrop-filter: blur(12px);
-        padding: 2.5rem 3rem 1.5rem 3rem;
-        min-width: 350px;
-        max-width: 700px;
-        width: 100%;
-        margin: 2rem auto;
-        display: flex;
-        flex-direction: column;
-        height: 80vh;
-        position: relative;
-        z-index: 1;
-    }
-    .chat-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.2rem;
-        border-bottom: 2px solid #e0e7ff;
-        padding-bottom: 0.7rem;
-    }
-    .header-title {
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-    }
-    .header-icon {
-        font-size: 2.1rem;
-        color: #6366f1;
-    }
-    .chat-header h2 {
-        font-family: 'Montserrat', sans-serif;
-        color: #232946;
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0;
-    }
-    .chat-header .room-actions {
-        display: flex;
-        gap: 0.7rem;
-    }
-    .btn-action, .btn-logout {
-        background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
-        color: #fff;
-        border: none;
-        padding: 0.7rem 1.3rem;
-        border-radius: 16px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        transition: background 0.2s, box-shadow 0.2s;
-        box-shadow: 0 2px 8px rgba(251,194,235,0.10);
-    }
-    .btn-action:hover, .btn-logout:hover {
-        background: linear-gradient(90deg, #a78bfa 0%, #6366f1 100%);
-        box-shadow: 0 4px 16px rgba(251,194,235,0.18);
-    }
-    .chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        margin-bottom: 1.5rem;
-        padding-right: 0.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1.1rem;
-    }
-    .empty-message {
-        text-align: center;
-        margin-top: 50px;
-        color: #64748b;
-        font-size: 1.1rem;
-    }
-    .message {
-        display: flex;
-        align-items: flex-end;
-        gap: 0.9rem;
-        width: 100%;
-        min-height: 60px;
-    }
-    .message.sent {
-        justify-content: flex-end;
-    }
-    .message.received {
-        justify-content: flex-start;
-    }
-    .avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 1.3rem;
-        flex-shrink: 0;
-        box-shadow: 0 2px 8px rgba(99,102,241,0.10);
-        border: 2.5px solid #fff;
-    }
-    .sent-avatar {
-        margin-left: 0.7rem;
-    }
-    .received-avatar {
-        margin-right: 0.7rem;
-    }
-    .bubble {
-        padding: 0.7rem 1.5rem;
-        border-radius: 18px;
-        min-width: 0;
-        max-width: 98%;
-        word-break: break-word;
-        box-shadow: 0 6px 24px rgba(99,102,241,0.13);
-        display: inline-block;
-        margin-left: 4px;
-        margin-right: 4px;
-        transition: box-shadow 0.2s, background 0.2s;
-    }
-    .sent-bubble {
-        background: linear-gradient(135deg, #7f9cf5 0%, #a78bfa 100%);
-        color: #fff;
-        box-shadow: 0 2px 12px 0 rgba(251,194,235,0.10);
-        align-items: flex-end;
-        border-bottom-right-radius: 8px;
-    }
-    .received-bubble {
-        background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
-        color: #fff;
-        box-shadow: 0 2px 12px 0 rgba(161,196,253,0.10);
-        align-items: flex-start;
-        border-bottom-left-radius: 8px;
-    }
-    .bubble-sender {
-        font-weight: 700;
-        margin-bottom: 0.2rem;
-        font-size: 1.08rem;
-    }
-    .bubble-original {
-        font-size: 1.05rem;
-        margin-bottom: 0.1rem;
-        word-break: break-word;
-        padding: 0;
-        background: none;
-        border-radius: 0;
-        display: inline;
-    }
-    .bubble-footer {
-        margin-top: 0.2rem;
-        font-size: 0.97rem;
-        color: #b0b3c6;
-        display: flex;
-        gap: 1rem;
-    }
-    .chat-input-area {
-        border-top: 1px solid #ebf0f5;
-        padding-top: 1.2rem;
-        margin-top: 0.5rem;
-        background: rgba(255,255,255,0.85);
-        border-radius: 0 0 24px 24px;
-    }
-    .input-area {
-        display: flex;
-        gap: 0.9rem;
-    }
-    .input-area .form-control {
-        border: 1.5px solid #ced4da;
-        padding: 0.7rem 1.2rem;
-        border-radius: 16px;
-        font-size: 1.08rem;
-        color: #495057;
-        outline: none;
-        background-color: #fff;
-        flex: 1;
-        box-shadow: 0 2px 8px rgba(99,102,241,0.07);
-        transition: border 0.2s;
-    }
-    .input-area .form-control:focus {
-        border: 1.5px solid #6366f1;
-    }
-    .btn-send {
-        background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
-        color: #fff;
-        border: none;
-        padding: 0.7rem 2.1rem;
-        border-radius: 16px;
-        font-size: 1.08rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: background 0.2s, box-shadow 0.2s;
-        box-shadow: 0 2px 8px rgba(251,194,235,0.10);
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-    }
-    .btn-send:hover {
-        background: linear-gradient(90deg, #a78bfa 0%, #6366f1 100%);
-        box-shadow: 0 4px 16px rgba(251,194,235,0.18);
-    }
-    .send-icon {
-        font-size: 1.3rem;
-        margin-right: 0.2rem;
-    }
-    @media (max-width: 800px) {
-        .chat-container {
-            padding: 0.5rem 0.2rem 0.5rem 0.2rem;
-            min-width: 0;
-            max-width: 100vw;
-            border-radius: 0;
-            height: 100vh;
+        /* --- CSS Global (Default: Desktop) --- */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(120deg, #f3f4f6 0%, #e0e7ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
-        .chat-header h2 {
-            font-size: 1.1rem;
+
+        /* Background shapes */
+        .bg-shape1, .bg-shape2, .bg-shape3 {
+            position: absolute;
+            z-index: 0;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+        }
+        .bg-shape1 {
+            width: 400px; height: 400px;
+            background: linear-gradient(135deg, #dbeafe 0%, #a5b4fc 100%);
+            top: -120px; left: -140px;
+        }
+        .bg-shape2 {
+            width: 300px; height: 300px;
+            background: linear-gradient(135deg, #f3e8ff 0%, #c7d2fe 100%);
+            bottom: -100px; right: -120px;
+        }
+        .bg-shape3 {
+            width: 200px; height: 200px;
+            background: linear-gradient(135deg, #d1fae5 0%, #bbf7d0 100%);
+            top: 60%; left: 10%;
+            opacity: 0.4;
+        }
+
+        .chat-container {
+            background: rgba(255,255,255,0.7);
+            border-radius: 36px;
+            box-shadow: 0 16px 48px 0 rgba(44, 62, 80, 0.10), 0 1.5px 8px 0 rgba(44,62,80,0.07);
+            backdrop-filter: blur(12px);
+            padding: 2.5rem 3rem 1.5rem 3rem;
+            min-width: 350px;
+            max-width: 700px;
+            width: 100%;
+            margin: 2rem auto;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #e0e7ff;
+            padding-bottom: 0.7rem;
         }
         .header-title {
-            gap: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .header-icon {
+            font-size: 2.1rem;
+            color: #6366f1;
+        }
+        .chat-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #232946;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .chat-header .room-actions {
+            display: flex;
+            gap: 0.7rem;
         }
         .btn-action, .btn-logout {
-            padding: 0.5rem 0.9rem;
-            font-size: 0.95rem;
-            border-radius: 12px;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            color: #fff;
+            border: none;
+            padding: 0.7rem 1.3rem;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(251,194,235,0.10);
+            white-space: nowrap;
+        }
+        .btn-action:hover, .btn-logout:hover {
+            background: linear-gradient(90deg, #a78bfa 0%, #6366f1 100%);
+            box-shadow: 0 4px 16px rgba(251,194,235,0.18);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            padding-right: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+            scroll-behavior: smooth;
+        }
+        .empty-message {
+            text-align: center;
+            margin-top: 50px;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        .message {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.9rem;
+            width: 100%;
+        }
+        .message.sent {
+            justify-content: flex-end;
+        }
+        .message.received {
+            justify-content: flex-start;
         }
         .avatar {
-            width: 32px; height: 32px; font-size: 0.95rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+            border: 2.5px solid #fff;
+        }
+        .sent-avatar {
+            margin-left: 0.7rem;
+        }
+        .received-avatar {
+            margin-right: 0.7rem;
         }
         .bubble {
-            padding: 0.6rem 1.1rem;
+            padding: 0.7rem 1.5rem;
+            border-radius: 18px;
+            min-width: 0;
+            word-break: break-word;
+            box-shadow: 0 6px 24px rgba(99,102,241,0.13);
+            display: inline-block;
+            transition: box-shadow 0.2s, background 0.2s;
+            flex-grow: 0;
+            flex-shrink: 1;
+        }
+        .sent-bubble {
+            background: linear-gradient(135deg, #7f9cf5 0%, #a78bfa 100%);
+            color: #fff;
+            box-shadow: 0 2px 12px 0 rgba(251,194,235,0.10);
+            border-bottom-right-radius: 8px;
+        }
+        .received-bubble {
+            background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+            color: #fff;
+            box-shadow: 0 2px 12px 0 rgba(161,196,253,0.10);
+            border-bottom-left-radius: 8px;
+        }
+        .bubble-sender {
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            font-size: 1.08rem;
+        }
+        .bubble-original {
+            font-size: 1.05rem;
+            margin-bottom: 0.1rem;
+            word-break: break-word;
+            padding: 0;
+            background: none;
+            border-radius: 0;
+            display: block;
+        }
+        .bubble-footer {
+            margin-top: 0.2rem;
             font-size: 0.97rem;
-            max-width: 99%;
-            border-radius: 14px;
-        }
-        .bubble-time-wrapper {
-            max-width: 99%;
-        }
-        .input-area .form-control {
-            padding: 0.6rem 0.7rem;
-            font-size: 1rem;
-            border-radius: 10px;
-        }
-        .btn-send {
-            padding: 0.6rem 1.2rem;
-            font-size: 1rem;
-            border-radius: 10px;
+            color: rgba(255,255,255,0.7);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
         }
         .chat-input-area {
-            border-radius: 0 0 16px 16px;
-            padding-top: 0.7rem;
+            border-top: 1px solid #ebf0f5;
+            padding-top: 1.2rem;
+            margin-top: 0.5rem;
+            background: rgba(255,255,255,0.85);
+            border-radius: 0 0 24px 24px;
         }
-        /* New responsive styles for scroll-to-bottom-btn */
+        .input-area {
+            display: flex;
+            gap: 0.9rem;
+        }
+        .input-area .form-control {
+            border: 1.5px solid #ced4da;
+            padding: 0.7rem 1.2rem;
+            border-radius: 16px;
+            font-size: 1.08rem;
+            color: #495057;
+            outline: none;
+            background-color: #fff;
+            flex: 1;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.07);
+            transition: border 0.2s;
+        }
+        .input-area .form-control:focus {
+            border: 1.5px solid #6366f1;
+        }
+        .btn-send {
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            color: #fff;
+            border: none;
+            padding: 0.7rem 2.1rem;
+            border-radius: 16px;
+            font-size: 1.08rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(251,194,235,0.10);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .btn-send:hover {
+            background: linear-gradient(90deg, #a78bfa 0%, #6366f1 100%);
+            box-shadow: 0 4px 16px rgba(251,194,235,0.18);
+        }
+        .send-icon {
+            font-size: 1.3rem;
+            margin-right: 0.2rem;
+        }
+        .bubble-time-wrapper {
+            display: flex;
+            flex-direction: column;
+            /* Default max-width for received messages, will be adjusted for sent */
+            max-width: calc(100% - 60px); 
+        }
+        .message.sent .bubble-time-wrapper {
+            align-items: flex-end;
+            max-width: 100%; /* Izinkan pesan dikirim menggunakan lebar penuh yang tersedia */
+        }
+        .message.received .bubble-time-wrapper {
+            align-items: flex-start;
+        }
+        /* Tambahan untuk .bubble di dalam .sent, agar tidak terlalu kecil */
+        .message.sent .bubble {
+            max-width: 98%; /* Berikan sedikit padding dari sisi kanan */
+        }
+        /* Tambahan untuk .bubble di dalam .received */
+        .message.received .bubble {
+            max-width: 98%; /* Berikan sedikit padding dari sisi kiri */
+        }
+
+
         .scroll-to-bottom-btn {
-            bottom: 70px; /* Adjusted from 90px */
-            right: 20px;  /* Adjusted from 32px */
-            width: 40px;  /* Adjusted from 48px */
-            height: 40px; /* Adjusted from 48px */
-            font-size: 1.5rem; /* Adjusted icon size */
+            position: absolute;
+            bottom: 90px;
+            right: 32px;
+            background: linear-gradient(135deg, #7f9cf5 0%, #a78bfa 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(99,102,241,0.18);
+            transition: opacity 0.3s, transform 0.3s, background 0.2s;
+            opacity: 0;
+            transform: translateY(20px);
+            visibility: hidden;
+            z-index: 10;
         }
-    }
-    .bubble-time-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        max-width: 90%;
-    }
-    .message.received .bubble-time-wrapper {
-        align-items: flex-start;
-    }
-    .scroll-to-bottom-btn {
-        position: absolute;
-        bottom: 90px;
-        right: 32px;
-        background: linear-gradient(135deg, #7f9cf5 0%, #a78bfa 100%);
-        color: #fff;
-        border: none;
-        border-radius: 50%;
-        width: 48px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        cursor: pointer;
-        box-shadow: 0 4px 16px rgba(99,102,241,0.18);
-        transition: opacity 0.3s, transform 0.3s;
-        opacity: 0;
-        transform: translateY(20px);
-        visibility: hidden;
-        z-index: 10;
-    }
-    .scroll-to-bottom-btn.show {
-        opacity: 1;
-        transform: translateY(0);
-        visibility: visible;
-    }
+        .scroll-to-bottom-btn:hover {
+            background: linear-gradient(135deg, #a78bfa 0%, #7f9cf5 100%);
+        }
+        .scroll-to-bottom-btn.show {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        /* --- Media Queries untuk HP (max-width: 768px) --- */
+        @media (max-width: 768px) {
+            html, body {
+                overflow-y: auto;
+            }
+
+            .bg-shape1, .bg-shape2, .bg-shape3 {
+                width: 250px; height: 250px;
+                filter: blur(50px);
+            }
+            .bg-shape1 { top: -80px; left: -90px; }
+            .bg-shape2 { bottom: -70px; right: -80px; }
+            .bg-shape3 { top: 50%; left: 5%; }
+
+            .chat-container {
+                padding: 1rem;
+                min-width: unset;
+                max-width: 100vw;
+                width: 100%;
+                border-radius: 0;
+                height: 100vh;
+                margin: 0;
+                box-shadow: none;
+                backdrop-filter: none;
+                background: #fff;
+            }
+
+            .chat-header {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 1rem;
+                padding-bottom: 0.5rem;
+                gap: 0.5rem;
+            }
+            .header-title {
+                width: 100%;
+                justify-content: center;
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            .chat-header h2 {
+                font-size: 1.5rem;
+            }
+            .header-icon {
+                font-size: 1.8rem;
+            }
+            .chat-header .room-actions {
+                width: 100%;
+                justify-content: space-around;
+                gap: 0.5rem;
+            }
+            .btn-action, .btn-logout {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+                border-radius: 12px;
+                flex: 1;
+                text-align: center;
+            }
+
+            .chat-messages {
+                margin-bottom: 1rem;
+                padding-right: 0;
+                padding-left: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+            .empty-message {
+                margin-top: 30px;
+                font-size: 1rem;
+            }
+
+            .message {
+                gap: 0.6rem;
+                min-height: unset;
+            }
+            .avatar {
+                width: 38px; height: 38px;
+                font-size: 1.1rem;
+                border: 2px solid #fff;
+            }
+            .sent-avatar {
+                margin-left: 0.5rem;
+            }
+            .received-avatar {
+                margin-right: 0.5rem;
+            }
+            .bubble {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+                border-radius: 16px;
+                max-width: calc(100% - 60px); /* Mobile calculation remains */
+                box-shadow: 0 4px 16px rgba(99,102,241,0.08);
+            }
+            .sent-bubble {
+                border-bottom-right-radius: 6px;
+            }
+            .received-bubble {
+                border-bottom-left-radius: 6px;
+            }
+            .bubble-sender {
+                font-size: 1rem;
+                margin-bottom: 0.1rem;
+            }
+            .bubble-original {
+                font-size: 0.9rem;
+            }
+            .bubble-footer {
+                font-size: 0.85rem;
+                margin-top: 0.1rem;
+                gap: 0.5rem;
+                color: rgba(255,255,255,0.8);
+            }
+
+            .chat-input-area {
+                padding: 0.8rem 0;
+                border-radius: 0;
+                background: #fff;
+            }
+            .input-area {
+                gap: 0.7rem;
+                padding: 0 1rem;
+            }
+            .input-area .form-control {
+                padding: 0.6rem 1rem;
+                font-size: 0.95rem;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(99,102,241,0.05);
+            }
+            .btn-send {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+                border-radius: 12px;
+            }
+            .send-icon {
+                font-size: 1.1rem;
+                margin-right: 0;
+            }
+            
+            .scroll-to-bottom-btn {
+                bottom: 70px;
+                right: 15px;
+                width: 44px;
+                height: 44px;
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Penyesuaian jika lebar layar sangat kecil (misal: iPhone SE) */
+        @media (max-width: 400px) {
+            .chat-header h2 {
+                font-size: 1.3rem;
+            }
+            .btn-action, .btn-logout {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.85rem;
+            }
+            .avatar {
+                width: 32px; height: 32px;
+                font-size: 0.9rem;
+            }
+            .bubble {
+                padding: 0.5rem 1rem;
+                font-size: 0.88rem;
+            }
+            .bubble-sender {
+                font-size: 0.9rem;
+            }
+            .bubble-original {
+                font-size: 0.85rem;
+            }
+            .bubble-footer {
+                font-size: 0.8rem;
+            }
+            .input-area .form-control {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            .btn-send {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            .send-icon {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -365,6 +520,9 @@ body {
                                 <div class="bubble sent-bubble">
                                     <div class="bubble-sender">Anda</div>
                                     <div class="bubble-original">{{ chat.decrypted }}</div>
+                                    <div class="bubble-footer">
+                                        <span class="bubble-time" data-timestamp="{{ chat.timestamp }}"></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="avatar sent-avatar" style="background: linear-gradient(135deg, #a5b4fc 0%, #c7d2fe 100%);">{{ chat.sender[0]|upper }}</div>
@@ -374,6 +532,9 @@ body {
                                 <div class="bubble received-bubble">
                                     <div class="bubble-sender">{{ chat.sender }}</div>
                                     <div class="bubble-original">{{ chat.decrypted }}</div>
+                                    <div class="bubble-footer">
+                                        <span class="bubble-time" data-timestamp="{{ chat.timestamp }}"></span>
+                                    </div>
                                 </div>
                             </div>
                         {% endif %}
@@ -381,7 +542,7 @@ body {
                 {% endfor %}
             {% endif %}
         </div>
-        <button id="scrollToBottomBtn" class="scroll-to-bottom-btn" title="Scroll ke bawah">&#8595;</button>
+        <button id="scrollToBottomBtn" class="scroll-to-bottom-btn" title="Gulir ke bawah">&#8595;</button>
         <div class="chat-input-area">
             <form id="messageForm">
                 <div class="input-area">
@@ -398,28 +559,44 @@ body {
             const messageInput = document.getElementById('messageInput');
             const chatMessages = document.getElementById('chatMessages');
             const currentUsername = {{ current_user.username | tojson }};
+            const scrollToBottomBtn = document.getElementById('scrollToBottomBtn');
 
-            function scrollToBottom() {
+            // Fungsi untuk menggulir ke bawah
+            function scrollToBottom(behavior = 'smooth') {
                 chatMessages.scrollTo({
                     top: chatMessages.scrollHeight,
-                    behavior: 'smooth'
+                    behavior: behavior
                 });
             }
+
+            // Fungsi untuk memformat dan menampilkan stempel waktu
             function formatAndDisplayTimestamps() {
-                document.querySelectorAll('.bubble-time, .bubble-time-outside').forEach(function(span) {
+                document.querySelectorAll('.bubble-time').forEach(function(span) {
                     const isoTimestamp = span.dataset.timestamp;
                     if (isoTimestamp) {
                         span.textContent = moment(isoTimestamp).format('HH:mm');
                     }
                 });
             }
+
+            // Gulir ke bawah saat halaman dimuat, tanpa animasi untuk pertama kali
+            // Menggunakan setTimeout untuk memastikan DOM sudah dirender sepenuhnya sebelum scroll
+            setTimeout(() => {
+                scrollToBottom('auto');
+                formatAndDisplayTimestamps();
+            }, 100); 
+            
+
+            // Event listener untuk form pengiriman pesan
             messageForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const message = messageInput.value.trim();
+
                 if (!message) {
-                    alert('Pesan tidak boleh kosong.');
+                    messageInput.focus();
                     return;
                 }
+
                 fetch(window.location.pathname, {
                     method: 'POST',
                     headers: {
@@ -439,29 +616,37 @@ body {
                         messageInput.value = '';
                         formatAndDisplayTimestamps();
                         scrollToBottom();
-                        // Sembunyikan pesan kosong jika ada pesan baru
                         const emptyMsg = document.querySelector('.empty-message');
                         if (emptyMsg) emptyMsg.style.display = 'none';
                     }
                 })
                 .catch(error => {
-                    alert('Terjadi kesalahan saat mengirim pesan.');
+                        console.error('Error sending message:', error);
+                        alert('Terjadi kesalahan saat mengirim pesan.');
                 });
             });
+
+            // Fungsi untuk menambahkan pesan ke UI
             function appendMessage(chat) {
                 const messageDiv = document.createElement('div');
                 const isSent = chat.sender === currentUsername;
                 const avatarText = chat.sender[0].toUpperCase();
                 messageDiv.className = `message animate__animated animate__fadeInUp ${isSent ? 'sent' : 'received'}`;
-                // Warna avatar konsisten
+
                 const avatarColors = ['#6366f1', '#10b981', '#f59e42', '#f43f5e', '#0ea5e9', '#a21caf'];
                 const avatarBg = chat.avatar_color_idx !== undefined ? avatarColors[chat.avatar_color_idx] : avatarColors[0];
+
+                const timestamp = chat.timestamp ? moment(chat.timestamp).format('HH:mm') : '';
+
                 if (isSent) {
                     messageDiv.innerHTML = `
                         <div class="bubble-time-wrapper">
                             <div class="bubble sent-bubble">
                                 <div class="bubble-sender">Anda</div>
                                 <div class="bubble-original">${chat.decrypted}</div>
+                                <div class="bubble-footer">
+                                    <span class="bubble-time" data-timestamp="${chat.timestamp}">${timestamp}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="avatar sent-avatar" style="background: linear-gradient(135deg, #a5b4fc 0%, #c7d2fe 100%);">${avatarText}</div>
@@ -473,51 +658,59 @@ body {
                             <div class="bubble received-bubble">
                                 <div class="bubble-sender">${chat.sender}</div>
                                 <div class="bubble-original">${chat.decrypted}</div>
+                                <div class="bubble-footer">
+                                    <span class="bubble-time" data-timestamp="${chat.timestamp}">${timestamp}</span>
+                                </div>
                             </div>
                         </div>
                     `;
                 }
                 chatMessages.appendChild(messageDiv);
             }
-            scrollToBottom();
-            formatAndDisplayTimestamps();
+
             let lastMessageCount = document.querySelectorAll('.message').length;
-            // Polling AJAX untuk pesan baru
+
+            // Polling AJAX untuk pesan baru (pertahankan interval 2 detik)
             setInterval(function() {
                 const roomId = window.location.pathname.split('/').pop();
                 fetch(`/room/${roomId}/messages`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.length > lastMessageCount) {
-                            // Tambahkan hanya pesan baru
+                            const isAtBottom = chatMessages.scrollHeight - chatMessages.scrollTop <= chatMessages.clientHeight + 1;
+
                             for (let i = lastMessageCount; i < data.length; i++) {
                                 appendMessage(data[i]);
                             }
                             lastMessageCount = data.length;
-                            scrollToBottom();
-                            formatAndDisplayTimestamps && formatAndDisplayTimestamps();
+                            formatAndDisplayTimestamps();
+
+                            if (isAtBottom) {
+                                scrollToBottom();
+                            } else {
+                                scrollToBottomBtn.classList.add('show');
+                            }
                         }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching new messages:', error);
                     });
             }, 2000);
+
             // Scroll to bottom button logic
-            const scrollToBottomBtn = document.getElementById('scrollToBottomBtn');
             if (chatMessages && scrollToBottomBtn) {
                 chatMessages.addEventListener('scroll', () => {
-                    // Show button if not at the bottom (within a threshold)
-                    if (chatMessages.scrollHeight - chatMessages.scrollTop > chatMessages.clientHeight + 100) { // 100px threshold
+                    if (chatMessages.scrollHeight - chatMessages.scrollTop > chatMessages.clientHeight + 200) {
                         scrollToBottomBtn.classList.add('show');
                     } else {
                         scrollToBottomBtn.classList.remove('show');
                     }
                 });
                 scrollToBottomBtn.addEventListener('click', () => {
-                    chatMessages.scrollTo({
-                        top: chatMessages.scrollHeight,
-                        behavior: 'smooth'
-                    });
+                    scrollToBottom();
                 });
             }
         });
     </script>
 </body>
-</html> 
+</html>
